@@ -9,7 +9,9 @@ import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SpringBootApplication
@@ -41,6 +43,18 @@ public class SpringReactiveTipsApplication {
 
     }
 
+    @Bean
+    ApplicationRunner lottery7From35() {
+        return args -> IntStream.range(0, 5)
+                                .boxed()
+                                .map(n -> new Random().ints(1, 36)
+                                                      .distinct()
+                                                      .limit(7)
+                                                      .sorted()
+                                                      .mapToObj(String::valueOf)
+                                                      .collect(Collectors.joining("\t")))
+                                .forEach(System.out::println);
+    }
 
     @Bean
     ApplicationRunner nonInterferenceRunner() {
